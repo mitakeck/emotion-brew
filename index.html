@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+
+	<!-- backbone.js -->
+	<script type="text/javascript" src="js/underscore.js"></script>
+	<script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript" src="js/backbone.js"></script>
+	<script type="text/javascript" src="js/day.js"></script>
+	
+	<!-- uikit -->
+	<link rel="stylesheet" href="css/uikit.css">
+	<script type="text/javascript" src="js/uikit.js"></script>
+	<style>
+		body{
+			background: #e6e6e6;
+		}
+	    svg .shadow {
+	    	text-shadow: 0px 0px 2px #e6e6e6;
+	    }
+	</style>
+
+	<!-- d3.js -->
+	<script type="text/javascript" src="js/d3.js"></script>
+
+	<!-- Google Web Fonts -->
+	<link href='http://fonts.googleapis.com/css?family=Ribeye+Marrow' rel='stylesheet' type='text/css'>
+
+
+	<script>
+		window.onload = function(){
+
+			var emotionCircleOffsets = {
+				"angry": {x:25, y:25},
+				"grief": {x:20,y:38},
+				"vigilance": {x:25,y:50},
+				"joy": {x:55, y:25},
+				"terror": {x:60,y:38},
+				"amazement": {x:55, y:50},
+			}
+
+			var svg = d3.select("svg");
+			var timeFormatToWeek = d3.time.format("%w");
+			var timeFormatToWeekCount = d3.time.format("%U");
+			var timeFormatToText = d3.time.format("%e");
+
+			var year = 2014;
+			var month = 2;
+			var nextYear = 2014;
+			var nextMonth = 3;
+			var weekCountOffset = timeFormatToWeekCount(new Date(year, month-1, 1));
+
+			// var days = d3.time.days(new Date(year, month-1, 1), new Date(nextYear, nextMonth-1, 1));
+			// var data = _.map(days, function(d){
+			// 	return {day: d, angry:3, grief:2, vigilance:2, joy:2, terror:2, amazement:2};
+			// });
+			// console.log(window.JSON.stringify(data));
+
+			d3.json("sample.json", function(error, root) {
+				console.log("json test");
+				console.log(error);
+				console.log(root);
+			});
+			var element = svg.selectAll("g")
+				.data(data);
+
+			element.enter()
+				.append("g")
+				.attr("title", function(d){ return d["day"]; });
+
+			_.each(emotionCircleOffsets, function(value, key){
+				element.append("circle")
+					.attr("cx", function(d){ return timeFormatToWeek(d["day"])*100+value["x"]; })
+					.attr("cy", function(d){ return (timeFormatToWeekCount(d["day"])-weekCountOffset)*100+value["y"]; })
+					.attr("r", "0")
+					.attr("fill", "url(#"+key+")")
+					.attr("opacity", "1")
+					.attr("stroke", "#FFF")
+					.attr("stroke-width", "2")
+					.transition()
+					.duration(1300)
+					.ease("bounce")
+					.delay(function(d, i){ return i*12; })
+					.attr("r", function(d){ return d[key]*10; })
+			});
+
+			// element.append("text")
+			// 	.text(function(d){  return timeFormatToText(d["day"]); })
+			// 	.attr("x", function(d){ return timeFormatToWeek(d["day"])*100+29; })
+			// 	.attr("y", function(d){ return (timeFormatToWeekCount(d["day"])-weekCountOffset)*100+49; })
+			// 	.attr("font-family", "Ribeye Marrow")
+			// 	.attr("font-size", "40")
+			// 	.attr("fill", "#FFF")
+			// 	.attr("class", "day");
+
+			element.append("text")
+				.text(function(d){  return timeFormatToText(d["day"]); })
+				.attr("x", function(d){ return timeFormatToWeek(d["day"])*100+40; })
+				.attr("y", function(d){ return (timeFormatToWeekCount(d["day"])-weekCountOffset)*100+50; })
+				.attr("font-family", "Ribeye Marrow")
+				.attr("font-size", "38")
+				.attr("fill", "#333")
+				.attr("class", "shadow")
+				.attr("text-anchor", "middle");
+
+			element.exit().remove();
+
+			// element.transition()
+			// 	.delay(function(d, i){
+			// 		return i*10;
+			// 	})
+			// 	.attr("opacity", 1)
+
+
+		}
+	</script>
+</head>
+<body style="text-align:center;height: ">
+	<svg width="700" height="500" style="width:700px; heighy:500px; margin: auto auto;">
+
+		<radialGradient id="angry" gradientUnits="userSpaceOnUse" cx="50%" cy="50%" r="75%">
+			<stop stop-color="#fd6b78" offset="0"/>
+			<stop stop-color="#fcada4" offset="1"/>
+		</radialGradient>
+
+		<radialGradient id="grief" gradientUnits="userSpaceOnUse" cx="50%" cy="50%" r="75%">
+			<stop stop-color="#5b78eb" offset="0"/>
+			<stop stop-color="#92bbf4" offset="1"/>
+		</radialGradient>
+
+		<radialGradient id="vigilance" gradientUnits="userSpaceOnUse" cx="50%" cy="50%" r="75%">
+			<stop stop-color="#fdc780" offset="0"/>
+			<stop stop-color="#fdc780" offset="1"/>
+		</radialGradient>
+
+		<radialGradient id="joy" gradientUnits="userSpaceOnUse" cx="50%" cy="50%" r="100%">
+			<stop stop-color="#ffff00" offset="0"/>
+			<stop stop-color="#ffff66" offset="1"/>
+		</radialGradient>
+
+		<radialGradient id="terror" gradientUnits="userSpaceOnUse" cx="50%" cy="50%" r="75%">
+			<stop stop-color="#84f183" offset="0"/>
+			<stop stop-color="#85ff8b" offset="1"/>
+		</radialGradient>
+
+		<radialGradient id="amazement" gradientUnits="userSpaceOnUse" cx="50%" cy="50%" r="75%">
+			<stop stop-color="#3bb3ff" offset="0"/>
+			<stop stop-color="#3bb3ff" offset="1"/>
+		</radialGradient>
+
+
+	</svg>
+</body>
+</html>
