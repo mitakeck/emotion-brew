@@ -43,8 +43,10 @@
 
 			var svg = d3.select("svg");
 			var timeFormatToWeek = d3.time.format("%w");
+			console.log(d3.time.format);
 			var timeFormatToWeekCount = d3.time.format("%U");
 			var timeFormatToText = d3.time.format("%e");
+			var timeFormatISO = d3.time.format.utc("%Y-%m-%dT%H:%M:%S.%LZ");
 
 			var year = 2014;
 			var month = 2;
@@ -58,60 +60,53 @@
 			// });
 			// console.log(window.JSON.stringify(data));
 
-			d3.json("sample.json", function(error, root) {
-				console.log("json test");
-				console.log(error);
-				console.log(root);
+			d3.json("sample.json", function(error, data) {
+				// console.log(error);
+
+				data.map(function(d){
+					var _date = timeFormatISO.parse(d["day"])
+					d["day"] = _date;
+					return d;
+				});
+
+				console.log(data);
+
+				var element = svg.selectAll("g")
+					.data(data);
+
+				element.enter()
+					.append("g")
+					.attr("title", function(d){ return d["day"]; });
+
+				_.each(emotionCircleOffsets, function(value, key){
+					element.append("circle")
+						.attr("cx", function(d){ return timeFormatToWeek(d["day"])*100+value["x"]; })
+						.attr("cy", function(d){ return (timeFormatToWeekCount(d["day"])-weekCountOffset)*100+value["y"]; })
+						.attr("r", "0")
+						.attr("fill", "url(#"+key+")")
+						.attr("opacity", "1")
+						.attr("stroke", "#FFF")
+						.attr("stroke-width", "2")
+						.transition()
+						.duration(1300)
+						.ease("bounce")
+						.delay(function(d, i){ return i*12; })
+						.attr("r", function(d){ return d[key]*10; })
+				});
+
+				element.append("text")
+					.text(function(d){  return timeFormatToText(d["day"]); })
+					.attr("x", function(d){ return timeFormatToWeek(d["day"])*100+40; })
+					.attr("y", function(d){ return (timeFormatToWeekCount(d["day"])-weekCountOffset)*100+50; })
+					.attr("font-family", "Ribeye Marrow")
+					.attr("font-size", "38")
+					.attr("fill", "#333")
+					.attr("class", "shadow")
+					.attr("text-anchor", "middle");
+
+				element.exit().remove();
 			});
-			var element = svg.selectAll("g")
-				.data(data);
 
-			element.enter()
-				.append("g")
-				.attr("title", function(d){ return d["day"]; });
-
-			_.each(emotionCircleOffsets, function(value, key){
-				element.append("circle")
-					.attr("cx", function(d){ return timeFormatToWeek(d["day"])*100+value["x"]; })
-					.attr("cy", function(d){ return (timeFormatToWeekCount(d["day"])-weekCountOffset)*100+value["y"]; })
-					.attr("r", "0")
-					.attr("fill", "url(#"+key+")")
-					.attr("opacity", "1")
-					.attr("stroke", "#FFF")
-					.attr("stroke-width", "2")
-					.transition()
-					.duration(1300)
-					.ease("bounce")
-					.delay(function(d, i){ return i*12; })
-					.attr("r", function(d){ return d[key]*10; })
-			});
-
-			// element.append("text")
-			// 	.text(function(d){  return timeFormatToText(d["day"]); })
-			// 	.attr("x", function(d){ return timeFormatToWeek(d["day"])*100+29; })
-			// 	.attr("y", function(d){ return (timeFormatToWeekCount(d["day"])-weekCountOffset)*100+49; })
-			// 	.attr("font-family", "Ribeye Marrow")
-			// 	.attr("font-size", "40")
-			// 	.attr("fill", "#FFF")
-			// 	.attr("class", "day");
-
-			element.append("text")
-				.text(function(d){  return timeFormatToText(d["day"]); })
-				.attr("x", function(d){ return timeFormatToWeek(d["day"])*100+40; })
-				.attr("y", function(d){ return (timeFormatToWeekCount(d["day"])-weekCountOffset)*100+50; })
-				.attr("font-family", "Ribeye Marrow")
-				.attr("font-size", "38")
-				.attr("fill", "#333")
-				.attr("class", "shadow")
-				.attr("text-anchor", "middle");
-
-			element.exit().remove();
-
-			// element.transition()
-			// 	.delay(function(d, i){
-			// 		return i*10;
-			// 	})
-			// 	.attr("opacity", 1)
 
 
 		}
