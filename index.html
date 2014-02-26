@@ -61,15 +61,12 @@
 			// console.log(window.JSON.stringify(data));
 
 			d3.json("sample.json", function(error, data) {
-				// console.log(error);
 
 				data.map(function(d){
 					var _date = timeFormatISO.parse(d["day"])
 					d["day"] = _date;
 					return d;
 				});
-
-				console.log(data);
 
 				var element = svg.selectAll("g")
 					.data(data);
@@ -87,6 +84,21 @@
 						.attr("opacity", "1")
 						.attr("stroke", "#FFF")
 						.attr("stroke-width", "2")
+						.attr("class", function(d){ return key; })
+						.on("mouseover", function(d){
+							var self = d3.select(this);
+							var other = d3.selectAll("circle");
+							// other.transition()
+							// 	.attr("r", 0);
+							self.transition()
+								.attr("r", function(d){ return d[key]*15; });
+						})
+						.on("mouseout", function(d){
+							var self = d3.select(this);
+							var other = d3.selectAll("circle");
+							self.transition()
+								.attr("r", function(d){ return d[key]*10; });
+						})
 						.transition()
 						.duration(1300)
 						.ease("bounce")
@@ -100,6 +112,7 @@
 					.attr("y", function(d){ return (timeFormatToWeekCount(d["day"])-weekCountOffset)*100+50; })
 					.attr("font-family", "Ribeye Marrow")
 					.attr("font-size", "38")
+					.attr("font-height", 0)
 					.attr("fill", "#333")
 					.attr("class", "shadow")
 					.attr("text-anchor", "middle");
