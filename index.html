@@ -66,8 +66,43 @@
 				}
 			});
 
+			var onMouseOver = function(key){
+				var self = d3.select(this);
+				var sameClassCircle = d3.selectAll("."+key);
+				var anotherClassCircle = d3.selectAll("circle:not(."+key+")");
+				console.log(anotherClassCircle);
+				anotherClassCircle.transition()
+					.attr("r", "0");
+				sameClassCircle.transition()
+					.attr("r", function(d){ return d[key]*15; });
+			};
+
+
+			var onMouseOut = function(key){
+				// var sameClassCircle = d3.selectAll("."+key);
+				// var anotherClassCircle = d3.selectAll("circle:not(."+key+")");
+				// render();
+				var self = d3.select(this);
+				var sameClassCircle = d3.selectAll("."+key);
+				var anotherClassCircle = d3.selectAll("circle:not(."+key+")");
+				console.log(anotherClassCircle);
+				anotherClassCircle.each(function(d){
+					this.__ontest();
+				})
+				sameClassCircle.transition()
+					.attr("r", function(d){ return d[key]*10; });
+			}
+
+			var Container = function(data){
+				Container.callee.data = data;
+			};
+
+			// var container = new Container();
 
 			var render = function(data){
+
+				var data = Container.data || data;
+				Container.data = data;
 
 				// target elemtns
 				var element = svg.selectAll("g")
@@ -91,18 +126,20 @@
 						.attr("stroke-width", "2")
 						.attr("class", function(d){ return key; })
 						.on("mouseover", function(d){
-							var self = d3.select(this);
-							var other = d3.selectAll("circle");
-							// other.transition()
-							// 	.attr("r", 0);
-							self.transition()
-								.attr("r", function(d){ return d[key]*15; });
+							onMouseOver(key);
 						})
 						.on("mouseout", function(d){
+							onMouseOut(key);
+						})
+						.on("test", function(d){
 							var self = d3.select(this);
 							var other = d3.selectAll("circle");
-							self.transition()
-								.attr("r", function(d){ return d[key]*10; });
+							var sameClass = d3.selectAll("."+key);
+							self.attr("fill", "url(#"+key+")")
+								.attr("opacity", 0)
+								.transition()
+								.attr("r", function(d){ return d[key]*10; })
+								.attr("opacity", 1);
 						})
 						.transition()
 						.duration(1300)
