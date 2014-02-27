@@ -17,21 +17,9 @@
 		body{
 			background: #e6e6e6;
 		}
-	    svg .shadow {
-	    	text-shadow: 0px 0px 2px #e6e6e6;
-	    }
-	    body div{
-	    	/*margin: 10px 10px;*/
-	    	/*padding: 10px 10px;*/
-	    	border: 1px solid #ccc;
-	    	background: #999999;
-	    	color: #fff;
-	    	width: 100px;
-	    	float: left;
-	    }
-	    body div#controller{
-	    	clear: both;
-	    }
+		#controller div{
+				background: #ccc;
+		}
 	</style>
 
 	<!-- d3.js -->
@@ -65,6 +53,9 @@
 			var nextMonth = 3;
 			var weekCountOffset = timeFormatToWeekCount(new Date(year, month-1, 1));
 
+			var normalSize = 15;
+			var hoverSize = 18;
+
 			d3.json("sample.json", function(error, data){
 				if(error){
 					alert("API Failed.");
@@ -78,7 +69,7 @@
 				}
 			});
 
-			var e = $("body div div");
+			var e = $("body #controller div");
 			e.on("mouseover", function(e){
 				emotionFilteredView(this);
 			}).on("mouseout", function(e){
@@ -102,9 +93,10 @@
 				anotherClassCircle.transition()
 					.attr("r", "0");
 				sameClassCircle.transition()
-					.attr("r", function(d){ return d[key]*15; })
+					.attr("r", function(d){ return d[key]*hoverSize; })
 					// .attr("cx", function(d){ return timeFormatToWeek(d["day"])*100+40; })
 					// .attr("cy", function(d){ return (timeFormatToWeekCount(d["day"])-weekCountOffset)*100+40; })
+				d3.selectAll("text").transition().attr("opacity", 0.5);
 			};
 
 
@@ -120,9 +112,10 @@
 					this.__ontest();
 				})
 				sameClassCircle.transition()
-					.attr("r", function(d){ return d[key]*10; })
+					.attr("r", function(d){ return d[key]*normalSize; })
 					// .attr("cx", function(d){ return timeFormatToWeek(d["day"])*100+emotionCircleOffsets[key]["x"]; })
 					// .attr("cy", function(d){ return (timeFormatToWeekCount(d["day"])-weekCountOffset)*100+emotionCircleOffsets[key]["y"]; })
+				d3.selectAll("text").transition().attr("opacity", 1);
 			}
 
 			var Container = function(data){
@@ -170,14 +163,14 @@
 							self.attr("fill", "url(#"+key+")")
 								// .attr("opacity", 0)
 								.transition()
-								.attr("r", function(d){ return d[key]*10; })
+								.attr("r", function(d){ return d[key]*normalSize; })
 								// .attr("opacity", 1);
 						})
 						.transition()
 						.duration(1300)
 						.ease("bounce")
 						.delay(function(d, i){ return i*12; })
-						.attr("r", function(d){ return d[key]*10; })
+						.attr("r", function(d){ return d[key]*normalSize; })
 				});
 
 				// day text
@@ -200,50 +193,52 @@
 		}
 	</script>
 </head>
-<body style="text-align:center;height: ">
+<body>
+	<div>
 
-	<div id="controller">
-		<div data-emotion="angry">1</div>
-		<div data-emotion="grief">2</div>
-		<div data-emotion="vigilance">3</div>
-		<div data-emotion="joy">4</div>
-		<div data-emotion="terror">5</div>
-		<div data-emotion="amazement">6</div>
+		<div class="uk-container" style="width:100%;">
+			<h1 class="uk-heading-large">Calendar<h1>
+			<svg width="600" height="700" style="border: 1px solid #ccc;width:700px;height:500px" class="uk-container-center">
+				<radialGradient id="angry" gradientUnits="userSpaceOnUse" cx="50%" cy="50%" r="75%">
+					<stop stop-color="#fd6b78" offset="0"/>
+					<stop stop-color="#fcada4" offset="1"/>
+				</radialGradient>
+
+				<radialGradient id="grief" gradientUnits="userSpaceOnUse" cx="50%" cy="50%" r="75%">
+					<stop stop-color="#5b78eb" offset="0"/>
+					<stop stop-color="#92bbf4" offset="1"/>
+				</radialGradient>
+
+				<radialGradient id="vigilance" gradientUnits="userSpaceOnUse" cx="50%" cy="50%" r="75%">
+					<stop stop-color="#fdc780" offset="0"/>
+					<stop stop-color="#fdc780" offset="1"/>
+				</radialGradient>
+
+				<radialGradient id="joy" gradientUnits="userSpaceOnUse" cx="50%" cy="50%" r="100%">
+					<stop stop-color="#ffff00" offset="0"/>
+					<stop stop-color="#ffff66" offset="1"/>
+				</radialGradient>
+
+				<radialGradient id="terror" gradientUnits="userSpaceOnUse" cx="50%" cy="50%" r="75%">
+					<stop stop-color="#84f183" offset="0"/>
+					<stop stop-color="#85ff8b" offset="1"/>
+				</radialGradient>
+
+				<radialGradient id="amazement" gradientUnits="userSpaceOnUse" cx="50%" cy="50%" r="75%">
+					<stop stop-color="#3bb3ff" offset="0"/>
+					<stop stop-color="#3bb3ff" offset="1"/>
+				</radialGradient>
+			</svg>
+		</div>
 	</div>
 
-	<svg width="700" height="500" style="width:700px; heighy:500px; margin: auto auto;">
-
-		<radialGradient id="angry" gradientUnits="userSpaceOnUse" cx="50%" cy="50%" r="75%">
-			<stop stop-color="#fd6b78" offset="0"/>
-			<stop stop-color="#fcada4" offset="1"/>
-		</radialGradient>
-
-		<radialGradient id="grief" gradientUnits="userSpaceOnUse" cx="50%" cy="50%" r="75%">
-			<stop stop-color="#5b78eb" offset="0"/>
-			<stop stop-color="#92bbf4" offset="1"/>
-		</radialGradient>
-
-		<radialGradient id="vigilance" gradientUnits="userSpaceOnUse" cx="50%" cy="50%" r="75%">
-			<stop stop-color="#fdc780" offset="0"/>
-			<stop stop-color="#fdc780" offset="1"/>
-		</radialGradient>
-
-		<radialGradient id="joy" gradientUnits="userSpaceOnUse" cx="50%" cy="50%" r="100%">
-			<stop stop-color="#ffff00" offset="0"/>
-			<stop stop-color="#ffff66" offset="1"/>
-		</radialGradient>
-
-		<radialGradient id="terror" gradientUnits="userSpaceOnUse" cx="50%" cy="50%" r="75%">
-			<stop stop-color="#84f183" offset="0"/>
-			<stop stop-color="#85ff8b" offset="1"/>
-		</radialGradient>
-
-		<radialGradient id="amazement" gradientUnits="userSpaceOnUse" cx="50%" cy="50%" r="75%">
-			<stop stop-color="#3bb3ff" offset="0"/>
-			<stop stop-color="#3bb3ff" offset="1"/>
-		</radialGradient>
-
-
-	</svg>
+	<div id="controller">
+		<div class="uk-button" data-emotion="angry">怒り</div>
+		<div class="uk-button" data-emotion="grief">悲しみ</div>
+		<div class="uk-button" data-emotion="vigilance">期待</div>
+		<div class="uk-button" data-emotion="joy">楽しみ</div>
+		<div class="uk-button" data-emotion="terror">恐れ</div>
+		<div class="uk-button" data-emotion="amazement">驚き</div>
+	</div>
 </body>
 </html>
