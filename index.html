@@ -43,7 +43,6 @@
 
 			var svg = d3.select("svg");
 			var timeFormatToWeek = d3.time.format("%w");
-			console.log(d3.time.format);
 			var timeFormatToWeekCount = d3.time.format("%U");
 			var timeFormatToText = d3.time.format("%e");
 			var timeFormatISO = d3.time.format.utc("%Y-%m-%dT%H:%M:%S.%LZ");
@@ -54,11 +53,6 @@
 			var nextMonth = 3;
 			var weekCountOffset = timeFormatToWeekCount(new Date(year, month-1, 1));
 
-			// var days = d3.time.days(new Date(year, month-1, 1), new Date(nextYear, nextMonth-1, 1));
-			// var data = _.map(days, function(d){
-			// 	return {day: d, angry:3, grief:2, vigilance:2, joy:2, terror:2, amazement:2};
-			// });
-			// console.log(window.JSON.stringify(data));
 
 			d3.json("sample.json", function(error, data) {
 
