@@ -53,18 +53,29 @@
 			var nextMonth = 3;
 			var weekCountOffset = timeFormatToWeekCount(new Date(year, month-1, 1));
 
+			d3.json("sample.json", function(error, data){
+				if(error){
+					alert("API Failed.");
+				}else{
+					data.map(function(d){
+						var _date = timeFormatISO.parse(d["day"])
+						d["day"] = _date;
+						return d;
+					});
+					render(data);
+				}
+			});
 
-			d3.json("sample.json", function(error, data) {
 
-				data.map(function(d){
-					var _date = timeFormatISO.parse(d["day"])
-					d["day"] = _date;
-					return d;
-				});
+			var render = function(data){
 
+				// target elemtns
 				var element = svg.selectAll("g")
 					.data(data);
 
+				// update elements
+
+				// enter elements
 				element.enter()
 					.append("g")
 					.attr("title", function(d){ return d["day"]; });
@@ -100,6 +111,7 @@
 						.attr("r", function(d){ return d[key]*10; })
 				});
 
+				// day text
 				element.append("text")
 					.text(function(d){  return timeFormatToText(d["day"]); })
 					.attr("x", function(d){ return timeFormatToWeek(d["day"])*100+40; })
@@ -111,9 +123,9 @@
 					.attr("class", "shadow")
 					.attr("text-anchor", "middle");
 
+				// delete elements
 				element.exit().remove();
-			});
-
+			}
 
 
 		}
