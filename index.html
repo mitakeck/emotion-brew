@@ -20,6 +20,9 @@
 		#controller div{
 				background: #ccc;
 		}
+		svg circle{
+			cursor: pointer;
+		}
 	</style>
 
 	<!-- d3.js -->
@@ -54,8 +57,9 @@
 			var weekCountOffset = timeFormatToWeekCount(new Date(year, month-1, 1));
 
 			var normalSize = 15;
-			var hoverSize = 18;
+			var hoverSize = 20;
 
+			// json データ読み込み
 			d3.json("sample.json", function(error, data){
 				if(error){
 					alert("API Failed.");
@@ -69,12 +73,14 @@
 				}
 			});
 
-			var e = $("body #controller div");
-			e.on("mouseover", function(e){
-				emotionFilteredView(this);
-			}).on("mouseout", function(e){
-				emotionNormalView(this);
-			});
+			// emotion controller 
+			$("body #controller div")
+				.on("mouseover", function(e){
+					emotionFilteredView(this);
+				})
+				.on("mouseout", function(e){
+					emotionNormalView(this);
+				});
 			var emotionFilteredView = function(e){
 				var emotion = $(e).attr("data-emotion");
 				onMouseOver(emotion);
@@ -86,48 +92,43 @@
 
 
 			var onMouseOver = function(key){
-				var self = d3.select(this);
 				var sameClassCircle = d3.selectAll("."+key);
 				var anotherClassCircle = d3.selectAll("circle:not(."+key+")");
-				console.log(anotherClassCircle);
 				anotherClassCircle.transition()
 					.attr("r", "0");
 				sameClassCircle.transition()
-					.attr("r", function(d){ return d[key]*hoverSize; })
-					// .attr("cx", function(d){ return timeFormatToWeek(d["day"])*100+40; })
-					// .attr("cy", function(d){ return (timeFormatToWeekCount(d["day"])-weekCountOffset)*100+40; })
-				d3.selectAll("text").transition().attr("opacity", 0.5);
+					.attr("r", function(d){ 
+						return d[key]*hoverSize; 
+					});
+					// .attr("cx", function(d){ 
+					// 	return timeFormatToWeek(d["day"])*100+40; 
+					// })
+					// .attr("cy", function(d){ 
+					// 	return (timeFormatToWeekCount(d["day"])-weekCountOffset)*100+40; 
+					// });
+				d3.selectAll("text").transition().attr("opacity", 0.9);
 			};
 
 
 			var onMouseOut = function(key){
-				// var sameClassCircle = d3.selectAll("."+key);
-				// var anotherClassCircle = d3.selectAll("circle:not(."+key+")");
-				// render();
-				var self = d3.select(this);
 				var sameClassCircle = d3.selectAll("."+key);
 				var anotherClassCircle = d3.selectAll("circle:not(."+key+")");
-				console.log(anotherClassCircle);
 				anotherClassCircle.each(function(d){
-					this.__ontest();
-				})
+					this.__onreset();
+				});
 				sameClassCircle.transition()
-					.attr("r", function(d){ return d[key]*normalSize; })
-					// .attr("cx", function(d){ return timeFormatToWeek(d["day"])*100+emotionCircleOffsets[key]["x"]; })
-					// .attr("cy", function(d){ return (timeFormatToWeekCount(d["day"])-weekCountOffset)*100+emotionCircleOffsets[key]["y"]; })
+					.attr("r", function(d){ 
+						return d[key]*normalSize; 
+					});
+					// .attr("cx", function(d){ 
+					// 	return timeFormatToWeek(d["day"])*100+emotionCircleOffsets[key]["x"]; 
+					// })
+					// .attr("cy", function(d){
+					// 	return (timeFormatToWeekCount(d["day"])-weekCountOffset)*100+emotionCircleOffsets[key]["y"];
+					// });
 				d3.selectAll("text").transition().attr("opacity", 1);
 			}
-
-			var Container = function(data){
-				Container.callee.data = data;
-			};
-
-			// var container = new Container();
-
 			var render = function(data){
-
-				var data = Container.data || data;
-				Container.data = data;
 
 				// target elemtns
 				var element = svg.selectAll("g")
@@ -138,46 +139,65 @@
 				// enter elements
 				element.enter()
 					.append("g")
-					.attr("title", function(d){ return d["day"]; });
+					.attr("title", function(d){ 
+						return d["day"]; 
+					});
 
 				_.each(emotionCircleOffsets, function(value, key){
 					element.append("circle")
-						.attr("cx", function(d){ return timeFormatToWeek(d["day"])*100+value["x"]; })
-						.attr("cy", function(d){ return (timeFormatToWeekCount(d["day"])-weekCountOffset)*100+value["y"]; })
+						.attr("cx", function(d){
+							return timeFormatToWeek(d["day"])*100+value["x"]; 
+						})
+						.attr("cy", function(d){ 
+							return (timeFormatToWeekCount(d["day"])-weekCountOffset)*100+value["y"]; 
+						})
 						.attr("r", "0")
 						.attr("fill", "url(#"+key+")")
 						.attr("opacity", "1")
 						.attr("stroke", "#FFF")
 						.attr("stroke-width", "2")
-						.attr("class", function(d){ return key; })
+						.attr("class", function(d){ 
+							return key; 
+						})
 						.on("mouseover", function(d){
 							onMouseOver(key);
 						})
 						.on("mouseout", function(d){
 							onMouseOut(key);
 						})
-						.on("test", function(d){
+						.on("click", function(d){
+							console.log(d);
+						})
+						.on("reset", function(d){
 							var self = d3.select(this);
-							var other = d3.selectAll("circle");
-							var sameClass = d3.selectAll("."+key);
 							self.attr("fill", "url(#"+key+")")
-								// .attr("opacity", 0)
 								.transition()
-								.attr("r", function(d){ return d[key]*normalSize; })
-								// .attr("opacity", 1);
+								.attr("r", function(d){ 
+									return d[key]*normalSize; 
+								});
 						})
 						.transition()
 						.duration(1300)
 						.ease("bounce")
-						.delay(function(d, i){ return i*12; })
-						.attr("r", function(d){ return d[key]*normalSize; })
+						.delay(function(d, i){ 
+							return i*12; 
+						})
+						.attr("r", function(d){ 
+							return d[key]*normalSize; 
+						})
 				});
 
 				// day text
 				element.append("text")
-					.text(function(d){  return timeFormatToText(d["day"]); })
-					.attr("x", function(d){ return timeFormatToWeek(d["day"])*100+40; })
-					.attr("y", function(d){ return (timeFormatToWeekCount(d["day"])-weekCountOffset)*100+50; })
+					.text(function(d){  
+						return timeFormatToText(d["day"]); 
+					})
+					.attr("x", function(d){ 
+						return timeFormatToWeek(d["day"])*100+40; 
+					})
+					.attr("y", function(d){ 
+						return (timeFormatToWeekCount(d["day"])-weekCountOffset)*100+50; 
+					})
 					.attr("font-family", "Ribeye Marrow")
 					.attr("font-size", "38")
 					.attr("font-height", 0)
@@ -198,7 +218,8 @@
 
 		<div class="uk-container" style="width:100%;">
 			<h1 class="uk-heading-large">Calendar<h1>
-			<svg width="600" height="700" style="border: 1px solid #ccc;width:700px;height:500px" class="uk-container-center">
+			<div>2014 / 2</div>
+			<svg width="600" height="700" style="width:700px;height:500px" class="uk-container-center">
 				<radialGradient id="angry" gradientUnits="userSpaceOnUse" cx="50%" cy="50%" r="75%">
 					<stop stop-color="#fd6b78" offset="0"/>
 					<stop stop-color="#fcada4" offset="1"/>
