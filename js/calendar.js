@@ -16,9 +16,9 @@ window.onload = function(){
 	var timeFormatISO = d3.time.format.utc("%Y-%m-%dT%H:%M:%S.%LZ");
 
 	var year = 2014;
-	var month = 3;
+	var month = 2;
 	var nextYear = 2014;
-	var nextMonth = 4;
+	var nextMonth = 3;
 	var weekCountOffset = timeFormatToWeekCount(new Date(year, month-1, 1));
 
 	var normalSize = 10;
@@ -27,7 +27,7 @@ window.onload = function(){
 	
 
 	$("#test").on("click", function(e){
-		getJson("test.php?year=2014&month=3");
+		getJson("test.php?year=2014&month=2");
 	});	
 
 	// emotion controller 
@@ -187,7 +187,7 @@ window.onload = function(){
 
 		
 	}
-	getJson("test.php?year=2014&month=3");
+	getJson("sample");
 
 
 }
