@@ -17,8 +17,15 @@
 		body{
 			background: #e6e6e6;
 		}
+		h1{
+			margin: 10px 10px;
+			line-height: 60px;
+		}
 		#controller div{
 				background: #ccc;
+				padding: 5px 5px;
+				margin: 10px 10px;
+				border-radius: 10px 10px;
 		}
 		svg circle{
 			cursor: pointer;
@@ -37,50 +44,55 @@
 	<div>
 
 		<div class="uk-container" style="width:100%;">
-			<h1 class="uk-heading-large">Calendar</h1>
-			<div>2014 / 2</div>
-			<svg width="600" height="700" style="width:700px;height:500px" class="uk-container-center">
-				<radialGradient id="angry" gradientUnits="userSpaceOnUse" cx="50%" cy="50%" r="75%">
-					<stop stop-color="#fd6b78" offset="0"/>
-					<stop stop-color="#fcada4" offset="1"/>
-				</radialGradient>
+			<h1 class="uk-heading-large" style="border-bottom:1px solid #ccc;">Calendar</h1>
 
-				<radialGradient id="grief" gradientUnits="userSpaceOnUse" cx="50%" cy="50%" r="75%">
-					<stop stop-color="#5b78eb" offset="0"/>
-					<stop stop-color="#92bbf4" offset="1"/>
-				</radialGradient>
+			<div style="text-align:center">
+				<h2>2014 / 3</h2>
+				<svg width="600" height="800" style="width:700px;height:600px" class="uk-container-center">
+					<radialGradient id="angry" gradientUnits="userSpaceOnUse" cx="50%" cy="50%" r="75%">
+						<stop stop-color="#fd6b78" offset="0"/>
+						<stop stop-color="#fcada4" offset="1"/>
+					</radialGradient>
 
-				<radialGradient id="vigilance" gradientUnits="userSpaceOnUse" cx="50%" cy="50%" r="75%">
-					<stop stop-color="#fdc780" offset="0"/>
-					<stop stop-color="#fdc780" offset="1"/>
-				</radialGradient>
+					<radialGradient id="grief" gradientUnits="userSpaceOnUse" cx="50%" cy="50%" r="75%">
+						<stop stop-color="#5b78eb" offset="0"/>
+						<stop stop-color="#92bbf4" offset="1"/>
+					</radialGradient>
 
-				<radialGradient id="joy" gradientUnits="userSpaceOnUse" cx="50%" cy="50%" r="100%">
-					<stop stop-color="#ffff00" offset="0"/>
-					<stop stop-color="#ffff66" offset="1"/>
-				</radialGradient>
+					<radialGradient id="vigilance" gradientUnits="userSpaceOnUse" cx="50%" cy="50%" r="75%">
+						<stop stop-color="#fdc780" offset="0"/>
+						<stop stop-color="#fdc780" offset="1"/>
+					</radialGradient>
 
-				<radialGradient id="terror" gradientUnits="userSpaceOnUse" cx="50%" cy="50%" r="75%">
-					<stop stop-color="#84f183" offset="0"/>
-					<stop stop-color="#85ff8b" offset="1"/>
-				</radialGradient>
+					<radialGradient id="joy" gradientUnits="userSpaceOnUse" cx="50%" cy="50%" r="100%">
+						<stop stop-color="#ffff00" offset="0"/>
+						<stop stop-color="#ffff66" offset="1"/>
+					</radialGradient>
 
-				<radialGradient id="amazement" gradientUnits="userSpaceOnUse" cx="50%" cy="50%" r="75%">
-					<stop stop-color="#3bb3ff" offset="0"/>
-					<stop stop-color="#3bb3ff" offset="1"/>
-				</radialGradient>
-			</svg>
-		</div>
+					<radialGradient id="terror" gradientUnits="userSpaceOnUse" cx="50%" cy="50%" r="75%">
+						<stop stop-color="#84f183" offset="0"/>
+						<stop stop-color="#85ff8b" offset="1"/>
+					</radialGradient>
+
+					<radialGradient id="amazement" gradientUnits="userSpaceOnUse" cx="50%" cy="50%" r="75%">
+						<stop stop-color="#3bb3ff" offset="0"/>
+						<stop stop-color="#3bb3ff" offset="1"/>
+					</radialGradient>
+				</svg>
+
+
+				<div id="controller">
+					<div class="uk-button" data-emotion="angry">怒り</div>
+					<div class="uk-button" data-emotion="grief">悲しみ</div>
+					<div class="uk-button" data-emotion="vigilance">期待</div>
+					<div class="uk-button" data-emotion="joy">楽しみ</div>
+					<div class="uk-button" data-emotion="terror">恐れ</div>
+					<div class="uk-button" data-emotion="amazement">驚き</div>
+				</div>
+			</div>
+		</div>	
 	</div>
 
-	<div id="controller">
-		<div class="uk-button" data-emotion="angry">怒り</div>
-		<div class="uk-button" data-emotion="grief">悲しみ</div>
-		<div class="uk-button" data-emotion="vigilance">期待</div>
-		<div class="uk-button" data-emotion="joy">楽しみ</div>
-		<div class="uk-button" data-emotion="terror">恐れ</div>
-		<div class="uk-button" data-emotion="amazement">驚き</div>
-	</div>
-	<div class="uk-button" id="test">次</div>
+	<div class="uk-button" id="test">ReDraw()</div>
 </body>
 </html>

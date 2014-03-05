@@ -16,18 +16,18 @@ window.onload = function(){
 	var timeFormatISO = d3.time.format.utc("%Y-%m-%dT%H:%M:%S.%LZ");
 
 	var year = 2014;
-	var month = 2;
+	var month = 3;
 	var nextYear = 2014;
-	var nextMonth = 3;
+	var nextMonth = 4;
 	var weekCountOffset = timeFormatToWeekCount(new Date(year, month-1, 1));
 
-	var normalSize = 15;
-	var hoverSize = 20;
+	var normalSize = 10;
+	var hoverSize = 15;
 
 	
 
 	$("#test").on("click", function(e){
-		getJson("201302");
+		getJson("test.php?year=2014&month=3");
 	});	
 
 	// emotion controller 
@@ -105,6 +105,7 @@ window.onload = function(){
 	var render = function(data){
 
 		svg.selectAll("g").remove();
+		svg.selectAll("text").remove();
 
 		// target elemtns
 		var element = svg.selectAll("g")
@@ -186,7 +187,7 @@ window.onload = function(){
 
 		
 	}
-	getJson("sample");
+	getJson("test.php?year=2014&month=3");
 
 
 }
