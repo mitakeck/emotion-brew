@@ -27,7 +27,8 @@ window.onload = function(){
 	
 
 	$("#test").on("click", function(e){
-		getJson("test.php?year=2014&month=2");
+		// getJson("test.php?year=2014&month=2");
+		getJson("sample");
 	});	
 
 	// emotion controller 
@@ -56,13 +57,13 @@ window.onload = function(){
 		sameClassCircle.transition()
 			.attr("r", function(d){ 
 				return d[key]*hoverSize; 
+			})
+			.attr("cx", function(d){ 
+				return timeFormatToWeek(d["day"])*100+40; 
+			})
+			.attr("cy", function(d){ 
+				return (timeFormatToWeekCount(d["day"])-weekCountOffset)*100+40; 
 			});
-			// .attr("cx", function(d){ 
-			// 	return timeFormatToWeek(d["day"])*100+40; 
-			// })
-			// .attr("cy", function(d){ 
-			// 	return (timeFormatToWeekCount(d["day"])-weekCountOffset)*100+40; 
-			// });
 		d3.selectAll("text").transition().attr("opacity", 0.9);
 	};
 
@@ -76,13 +77,13 @@ window.onload = function(){
 		sameClassCircle.transition()
 			.attr("r", function(d){ 
 				return d[key]*normalSize; 
+			})
+			.attr("cx", function(d){ 
+				return timeFormatToWeek(d["day"])*100+emotionCircleOffsets[key]["x"]; 
+			})
+			.attr("cy", function(d){
+				return (timeFormatToWeekCount(d["day"])-weekCountOffset)*100+emotionCircleOffsets[key]["y"];
 			});
-			// .attr("cx", function(d){ 
-			// 	return timeFormatToWeek(d["day"])*100+emotionCircleOffsets[key]["x"]; 
-			// })
-			// .attr("cy", function(d){
-			// 	return (timeFormatToWeekCount(d["day"])-weekCountOffset)*100+emotionCircleOffsets[key]["y"];
-			// });
 		d3.selectAll("text").transition().attr("opacity", 1);
 	};
 
@@ -178,7 +179,7 @@ window.onload = function(){
 			.attr("y", function(d){ 
 				return (timeFormatToWeekCount(d["day"])-weekCountOffset)*100+50; 
 			})
-			.attr("font-family", "Ribeye Marrow")
+			.attr("font-family", "Ubuntu Mono")
 			.attr("font-size", "38")
 			.attr("font-height", 0)
 			.attr("fill", "#333")
